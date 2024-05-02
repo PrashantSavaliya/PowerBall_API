@@ -89,9 +89,10 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.Use(async (context, next) =>
 {
-    if (context.Request.Path == "/")
+    if (context.Request.Path.Value == "/")
     {
-        context.Response.Redirect("/swagger/index.html");
+        string swaggerPath = $"{context.Request.PathBase}/swagger/index.html";
+        context.Response.Redirect(swaggerPath);
     }
     await next();
 });
