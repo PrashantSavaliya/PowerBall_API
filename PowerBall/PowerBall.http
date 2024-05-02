@@ -1,0 +1,6 @@
+@PowerBall_HostAddress = http://localhost:5264
+
+GET {{PowerBall_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
