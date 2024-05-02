@@ -79,23 +79,28 @@ builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
+app.Use((context, next) =>
+{
+    // Skip authentication and proceed to the next middleware
+    return next.Invoke();
+});
+
+// Configure the HTTP request pipeline.
+app.UseCors(x => x.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader());
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PowerBall v1");
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseHsts();
 }
-
-app.UseSwagger();
-app.UseSwaggerUI();
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path == "/")
-    {
-        context.Response.Redirect("/swagger/index.html");
-    }
-    await next();
-});
 
 app.UseSession();
 app.UseHttpsRedirection();
